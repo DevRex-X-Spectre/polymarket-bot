@@ -1,0 +1,29 @@
+{
+  "name": "polymarket-bot",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Research-first Polymarket trading system. Live trading is disabled by default.",
+  "type": "module",
+  "packageManager": "pnpm@10.17.1",
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "start": "pnpm --filter @polymarket-bot/trader start",
+    "research:test": "python -m pytest research"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  }
+}

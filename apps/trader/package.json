@@ -1,0 +1,16 @@
+{
+  "name": "@polymarket-bot/trader",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "polymarket-trader": "./dist/main.js"
+  },
+  "scripts": {
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@polymarket-bot/config": "workspace:*",
+    "@polymarket-bot/shared": "workspace:*"
+  }
+}
