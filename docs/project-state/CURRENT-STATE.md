@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/CURRENT-STATE.md`
 **Status:** Active
 **Document Type:** Project State Record
-**Last Updated:** 2026-09-13 (TODO-010 resolution metadata implemented)
+**Last Updated:** 2026-09-13 (TODO-011 market-family validation implemented)
 
 ---
 
@@ -49,11 +49,11 @@ RESEARCH / FOUNDATION IMPLEMENTATION
 
 phase.
 
-Documentation remains complete. Phase 0–1, Gamma discovery (TODO-008), market identity (TODO-009), and resolution metadata extraction (TODO-010) are implemented in code.
+Documentation remains complete. Phase 0–1, Gamma discovery (TODO-008), market identity (TODO-009), resolution metadata extraction (TODO-010), and market-family validation (TODO-011) are implemented in code.
 
 The project has not yet been approved for unrestricted live trading.
 
-The current priority is market-family validation (TODO-011). CLOB adapters and live trading remain unimplemented.
+The current priority is the read-only CLOB REST adapter (TODO-012). CLOB adapters and live trading remain unimplemented.
 
 ---
 
@@ -301,6 +301,8 @@ Before comparing or arbitraging markets, the system must verify that they repres
 * Resolution mechanisms
 * Timestamps
 * Outcome semantics
+
+`validateMarketFamily()` now performs strict, deterministic comparison of requested contract relationship, required event identity, authoritative subject and reference-asset facts, resolution mechanism/source/rule text/end timestamp, and YES/NO labels. It returns `compatible`, `incompatible`, or `unknown`; unknown never becomes compatible. Titles, slugs, categories, and ticker-like text are not inputs. Current Gamma discovery has no authoritative reference-asset field, so callers must enrich that fact from an approved source before receiving a fully compatible result.
 
 ---
 

@@ -25,6 +25,19 @@ export {
   type ResolutionExtractionInput,
 } from "./resolution.js";
 export {
+  MARKET_FAMILY_FIELD_STATUSES,
+  MARKET_FAMILY_VALIDATION_STATUSES,
+  MARKET_RELATIONSHIPS,
+  validateMarketFamily,
+  type MarketFamilyCandidate,
+  type MarketFamilyFacts,
+  type MarketFamilyFieldStatus,
+  type MarketFamilyValidation,
+  type MarketFamilyValidationOptions,
+  type MarketFamilyValidationStatus,
+  type MarketRelationship,
+} from "./family.js";
+export {
   MARKET_LIFECYCLE_STATUSES,
   classifyGammaMarketStatus,
   isDiscoveredAsTradable,

@@ -1,7 +1,7 @@
 # Session Progress
 
 **Last updated:** 2026-09-13
-**Session:** TODO-010 resolution metadata + official agent-skills snapshot
+**Session:** TODO-011 market-family validation
 **Operating mode:** RESEARCH (live trading remains disabled)
 
 This file exists so a later session can continue without rediscovering state.
@@ -12,7 +12,7 @@ This file exists so a later session can continue without rediscovering state.
 
 1. Read this file and `memory.md`.
 2. Read `docs/project-state/CURRENT-STATE.md` and `TODO.md`.
-3. Continue at **TODO-011** (market-family validation). Do not skip to trading.
+3. Continue at **TODO-012** (read-only CLOB REST adapter). Do not skip to trading.
 
 ```powershell
 pnpm install
@@ -38,15 +38,22 @@ vendor/polymarket-agent-skills/
 
 ## Completed this session
 
-TODO-010 (resolution metadata extraction) and an official `Polymarket/agent-skills` snapshot.
+TODO-011 (market-family validation).
 
 | Check | Result |
 | --- | --- |
-| `pnpm typecheck` / `pnpm build` | pass |
-| `pnpm test` | 59 passed, 1 skipped |
-| Live Gamma HTTP | 1 passed |
+| `pnpm exec vitest run packages/market-models/tests` | 27 passed |
+| `pnpm typecheck` | pass |
 | Live trading | not implemented |
-| `SecureClient` | not constructed |
+| CLOB/order APIs | not added |
+
+### Market-family validation behavior
+
+- `validateMarketFamily()` compares a requested `same-contract` or `distinct-contract` relationship.
+- It checks event id, supplied authoritative underlying/reference asset facts, resolution mechanism/source/rule text/end timestamp, and YES/NO labels.
+- Every check is `match`, `mismatch`, or `unknown`; aggregate status is `compatible`, `incompatible`, or `unknown`.
+- Title, slug, category, and ticker-like text are not inputs, and identities are not mutated.
+- Current Gamma records lack an authoritative reference asset. A caller must provide approved enrichment before a fully compatible result is possible.
 
 ### Skills consulted
 
@@ -70,11 +77,11 @@ Official skill examples use `@polymarket/clob-client`. This repo continues to us
 
 ---
 
-## Next: TODO-011 Market family validation
+## Next: TODO-012 Read-only CLOB REST adapter
 
-Verify compatible event, underlying, resolution, timestamp, and outcome semantics before comparing markets.
+Implement only the read-only CLOB market-data integration needed for orderbooks, prices, market information, and dynamic market parameters.
 
-Do not add order submission.
+Preserve research-first safety; do not add order submission or construct a `SecureClient`.
 
 ---
 

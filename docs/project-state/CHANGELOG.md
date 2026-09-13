@@ -5,9 +5,27 @@
 **Document:** `docs/project-state/CHANGELOG.md`
 **Status:** Active
 **Document Type:** Historical Change Record
-**Last Updated:** 2026-09-13
+**Last Updated:** 2026-09-13 (TODO-011 market-family validation)
 
 This file records meaningful historical changes. Current operational state belongs in `CURRENT-STATE.md`.
+
+---
+
+## 2026-09-13 — Market-family validation
+
+### Added
+
+- `validateMarketFamily()` and typed market-family candidates in `packages/market-models`.
+- Per-field comparison for contract relationship, event identity, authoritative underlying/reference asset facts, resolution mechanism/source/rule/end timestamp, and YES/NO labels.
+- Focused tests for compatible contracts, event/resolution/timestamp/outcome mismatches, unknown resolution data, misleading similar titles, and identity preservation.
+
+### Safety
+
+- Results are three-state: `compatible`, `incompatible`, or `unknown`.
+- Unknown data is not compatible data.
+- Titles, slugs, categories, and ticker-like text are never validation evidence.
+- Gamma's absent reference asset remains unknown until an approved authoritative source enriches it.
+- No CLOB, order, wallet, or live-trading capability was added.
 
 ---
 

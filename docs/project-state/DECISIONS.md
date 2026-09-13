@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/DECISIONS.md`
 **Status:** Active
 **Document Type:** Decision Register
-**Last Updated:** 2026-09-13 (D-074 agent-skills snapshot, D-075 resolution metadata)
+**Last Updated:** 2026-09-13 (D-076 strict market-family validation)
 
 ---
 
@@ -1386,7 +1386,15 @@ Successful resolution extraction does not make a market tradable.
 
 ---
 
-# 79. Decision Change Protocol
+# 79. D-076: Market-Family Validation Is Strict and Three-State
+
+**Status:** APPROVED
+
+Market-family validation compares only authoritative normalized facts and returns `compatible`, `incompatible`, or `unknown`. It verifies the requested contract relationship, event identity when required, underlying, reference asset, resolution mechanism, stated resolution source, stated rule text, resolution end timestamp, and YES/NO labels. A missing fact remains unknown; it is not treated as a match. Titles, slugs, categories, and ticker-like text are not validation evidence. Gamma's current missing reference-asset field must be enriched from an approved source before a fully compatible family can be established.
+
+---
+
+# 80. Decision Change Protocol
 
 When an approved decision needs to change:
 
@@ -1410,7 +1418,7 @@ The previous decision must not simply disappear from the project history.
 
 ---
 
-# 80. Decision Integrity Rule
+# 81. Decision Integrity Rule
 
 The AI agent must not silently change an approved decision because:
 
@@ -1423,7 +1431,7 @@ Material changes require evidence and appropriate approval.
 
 ---
 
-# 81. Final Decision Principle
+# 82. Final Decision Principle
 
 The project follows:
 
@@ -1473,6 +1481,7 @@ The bot is being built as a research and execution system whose profitability mu
 | D-066 | Official sources prioritized    | Approved           |
 | D-068 | No premature microservices      | Approved           |
 | D-075 | Project-state separation        | Approved           |
+| D-076 | Strict market-family validation | Approved           |
 
 ---
 

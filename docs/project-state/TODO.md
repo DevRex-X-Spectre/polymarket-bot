@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/TODO.md`
 **Status:** Active
 **Document Type:** Project Backlog
-**Last Updated:** 2026-09-13 (TODO-010 resolution metadata implemented)
+**Last Updated:** 2026-09-13 (TODO-011 market-family validation implemented)
 
 ---
 
@@ -296,11 +296,13 @@ before a strategy treats the market as eligible.
 
 ## TODO-011: Implement Market Family Validation
 
-**Status:** NOT STARTED
+**Status:** COMPLETED
 
 Create the market-family validation layer.
 
 It must verify compatibility before comparing markets for structural relationships.
+
+**Completed (2026-09-13):** `validateMarketFamily()` in `packages/market-models` compares a requested `same-contract` or `distinct-contract` relationship, required event id, authoritative normalized underlying/reference asset facts, resolution mechanism/source/rule text/end timestamp, and YES/NO labels. Each field reports `match`, `mismatch`, or `unknown`; the aggregate result is `compatible`, `incompatible`, or `unknown`. The validator does not use title, slug, category, or ticker-like text and does not mutate either market identity. Gamma's absent reference-asset field remains explicitly unknown unless a caller supplies facts from an approved authoritative source.
 
 ---
 
