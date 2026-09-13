@@ -1402,7 +1402,15 @@ The TODO-012 adapter uses the current `@polymarket/client` public-client methods
 
 ---
 
-# 81. Decision Change Protocol
+# 81. D-078: Read-Only Market WebSocket Adapter
+
+**Status:** APPROVED
+
+The market WebSocket adapter connects to the public endpoint `wss://ws-subscriptions-clob.polymarket.com/ws/market`. It manages subscriptions by asset IDs (token IDs), sends mandatory 10-second `PING` heartbeats, and normalizes supported public events (`book`, `price_change`, `last_trade_price`, `tick_size_change`, `best_bid_ask`, `new_market`, and `market_resolved`). Unknown events are explicitly preserved as `MarketUnknownEvent`, and malformed payloads are classified as `MarketMalformedEvent`. The adapter is strictly read-only, constructs no `SecureClient`, performs no user streaming or order management, and does not mutate canonical market identities.
+
+---
+
+# 82. Decision Change Protocol
 
 When an approved decision needs to change:
 
@@ -1426,7 +1434,7 @@ The previous decision must not simply disappear from the project history.
 
 ---
 
-# 82. Decision Integrity Rule
+# 83. Decision Integrity Rule
 
 The AI agent must not silently change an approved decision because:
 
@@ -1439,7 +1447,7 @@ Material changes require evidence and appropriate approval.
 
 ---
 
-# 83. Final Decision Principle
+# 84. Final Decision Principle
 
 The project follows:
 
@@ -1449,7 +1457,7 @@ The bot is being built as a research and execution system whose profitability mu
 
 ---
 
-# 79. Decision Register Summary
+# 85. Decision Register Summary
 
 | ID    | Decision                        | Status             |
 | ----- | ------------------------------- | ------------------ |
@@ -1491,10 +1499,11 @@ The bot is being built as a research and execution system whose profitability mu
 | D-075 | Project-state separation        | Approved           |
 | D-076 | Strict market-family validation | Approved           |
 | D-077 | Public order-book dynamic fields | Approved          |
+| D-078 | Read-only market WebSocket      | Approved           |
 
 ---
 
-# 80. Completion Criteria
+# 86. Completion Criteria
 
 This document is complete when:
 
@@ -1512,7 +1521,7 @@ This document is complete when:
 
 ---
 
-# 81. Next Document
+# 87. Next Document
 
 The next document is:
 

@@ -20,6 +20,7 @@ describe("polymarket package exports", () => {
       "index.ts",
       "market-data.ts",
       "normalize.ts",
+      "websocket.ts",
     ];
     for (const file of files) {
       const source = readFileSync(path.join(srcDir, file), "utf8");

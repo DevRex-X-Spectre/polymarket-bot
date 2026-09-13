@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/CURRENT-STATE.md`
 **Status:** Active
 **Document Type:** Project State Record
-**Last Updated:** 2026-09-13 (TODO-012 read-only CLOB REST adapter implemented)
+**Last Updated:** 2026-09-13 (TODO-013 market WebSocket adapter implemented)
 
 ---
 
@@ -49,11 +49,11 @@ RESEARCH / FOUNDATION IMPLEMENTATION
 
 phase.
 
-Documentation remains complete. Phase 0–1, Gamma discovery (TODO-008), market identity (TODO-009), resolution metadata extraction (TODO-010), market-family validation (TODO-011), and the read-only CLOB REST adapter (TODO-012) are implemented in code.
+Documentation remains complete. Phase 0–1, Gamma discovery (TODO-008), market identity (TODO-009), resolution metadata extraction (TODO-010), market-family validation (TODO-011), the read-only CLOB REST adapter (TODO-012), and the read-only market WebSocket adapter (TODO-013) are implemented in code.
 
 The project has not yet been approved for unrestricted live trading.
 
-The current priority is the market WebSocket adapter (TODO-013). Live trading remains unimplemented.
+The current priority is snapshot + stream recovery (TODO-014). Live trading remains unimplemented.
 
 ---
 
@@ -204,7 +204,7 @@ https://clob.polymarket.com
 
 The official current TypeScript SDK is the primary application integration direction.
 
-Public Gamma discovery and read-only CLOB data are implemented via `@polymarket/client` `createPublicClient()` in `packages/polymarket`. `createClobMarketData()` wraps public `fetchOrderBook`, `fetchMidpoint`, and `fetchSpread`, normalizing order-book levels and the book-provided dynamic parameters without leaking SDK response shapes. Internal identity types live in `packages/market-models`. Resolution metadata is extracted from stated Gamma/SDK fields (`market.resolution.*`, `market.description`, outcome labels, timing) without inferring Binance or a reference asset from the title. A `SecureClient` is not constructed. Order submission remains unimplemented.
+Public Gamma discovery and read-only CLOB data are implemented via `@polymarket/client` `createPublicClient()` in `packages/polymarket`. `createClobMarketData()` wraps public `fetchOrderBook`, `fetchMidpoint`, and `fetchSpread`, normalizing order-book levels and the book-provided dynamic parameters without leaking SDK response shapes. Internal identity types live in `packages/market-models`. Resolution metadata is extracted from stated Gamma/SDK fields (`market.resolution.*`, `market.description`, outcome labels, timing) without inferring Binance or a reference asset from the title. The read-only market WebSocket adapter (`createMarketWebSocketAdapter`) connects to `wss://ws-subscriptions-clob.polymarket.com/ws/market`, sends 10-second `PING` heartbeats, and normalizes `book`, `price_change`, `last_trade_price`, `tick_size_change`, `best_bid_ask`, `new_market`, and `market_resolved` events without mutating market identity. A `SecureClient` is not constructed. Order submission remains unimplemented.
 
 Official Polymarket agent skills are snapshotted from `Polymarket/agent-skills@91ee44ae113e958affd20cd505c6e9d9d6100e0b` under `vendor/polymarket-agent-skills/` and `.grok/skills/web3-polymarket/`. Those skills remain a domain reference; this repository continues to use `@polymarket/client`, not `@polymarket/clob-client`.
 
@@ -340,7 +340,7 @@ The system must support:
 * Resubscription
 * Recovery
 
-A WebSocket connection being open does not automatically mean the data is valid or fresh.
+The read-only market WebSocket adapter connects to the public market endpoint, manages subscriptions with custom features enabled, and emits normalized market events. A WebSocket connection being open does not automatically mean the data is valid or fresh.
 
 ---
 

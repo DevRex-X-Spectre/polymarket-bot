@@ -5,9 +5,34 @@
 **Document:** `docs/project-state/CHANGELOG.md`
 **Status:** Active
 **Document Type:** Historical Change Record
-**Last Updated:** 2026-09-13 (TODO-011 market-family validation)
+**Last Updated:** 2026-09-13 (TODO-013 market WebSocket adapter)
 
 This file records meaningful historical changes. Current operational state belongs in `CURRENT-STATE.md`.
+
+---
+
+## 2026-09-13 — Read-only market WebSocket adapter
+
+### Added
+
+- `createMarketWebSocketAdapter()` and `parseMarketStreamMessage()` in `packages/polymarket/src/websocket.ts`.
+- Normalized models for all 7 supported market events (`book`, `price_change`, `last_trade_price`, `tick_size_change`, `best_bid_ask`, `new_market`, `market_resolved`).
+- Typed handling for `MarketUnknownEvent` and `MarketMalformedEvent`.
+- 10-second `PING` heartbeat keep-alive with automatic `PONG` absorption.
+- Dynamic subscription and unsubscription support via `subscribe()` and `unsubscribe()`.
+- Focused mock test suite (`packages/polymarket/tests/websocket.test.ts`) covering all events, dynamic subscription, malformed events, connection errors, heartbeat, and disconnect handling.
+
+### Verified sources
+
+- Official agent-skills snapshot: `vendor/polymarket-agent-skills/SKILL.md` (Core Pattern: WebSocket Subscribe), `vendor/polymarket-agent-skills/market-data.md` (CLOB Orderbook & Key Market Fields), `vendor/polymarket-agent-skills/websocket.md` (Market channel endpoint, subscription format, dynamic subscribe/unsubscribe, event types, heartbeat).
+- Public market endpoint: `wss://ws-subscriptions-clob.polymarket.com/ws/market`.
+- Event schemas: `book`, `price_change` (including level removal with `size: "0"`), `last_trade_price`, `tick_size_change`, `best_bid_ask`, `new_market`, `market_resolved`.
+
+### Safety
+
+- Strictly read-only: no order submission, cancellation, or trading execution.
+- No wallet signing, private-key handling, or `SecureClient` construction.
+- Canonical market identities are preserved without mutation.
 
 ---
 

@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/TODO.md`
 **Status:** Active
 **Document Type:** Project Backlog
-**Last Updated:** 2026-09-13 (TODO-012 read-only CLOB REST adapter implemented)
+**Last Updated:** 2026-09-13 (TODO-013 market WebSocket adapter implemented)
 
 ---
 
@@ -32,6 +32,9 @@ Configuration isolation (Phase 1 completed)
 Gamma market discovery (TODO-008 completed)
 Market identity types (TODO-009 completed)
 Resolution metadata extraction (TODO-010 completed)
+Market-family validation (TODO-011 completed)
+CLOB REST adapter (TODO-012 completed)
+Market WebSocket adapter (TODO-013 completed)
 ```
 
 The following are established:
@@ -325,7 +328,7 @@ Implement the read-only market-data integration required for:
 
 ## TODO-013: Implement Market WebSocket Adapter
 
-**Status:** NOT STARTED
+**Status:** COMPLETED
 
 Implement the market WebSocket integration.
 
@@ -338,6 +341,8 @@ Support the required market events including:
 * Best bid/ask
 * New market events
 * Market resolution events
+
+**Completed (2026-09-13):** `createMarketWebSocketAdapter()` and `parseMarketStreamMessage()` in `packages/polymarket` connect to the public market endpoint (`wss://ws-subscriptions-clob.polymarket.com/ws/market`), manage subscriptions by token IDs (`assets_ids`) with `custom_feature_enabled: true`, and maintain a 10-second `PING`/`PONG` heartbeat. Normalizes all 7 officially supported market channel events (`book`, `price_change`, `last_trade_price`, `tick_size_change`, `best_bid_ask`, `new_market`, `market_resolved`). Safely normalizes decimal values and size "0" level removals. Unknown event types explicitly return `MarketUnknownEvent`, and malformed payloads return `MarketMalformedEvent`. Preserves canonical market identity and read-only safety boundary without any trading, signing, or user streams. Mock-based test suite covers all events, malformed handling, heartbeat, connection failures, dynamic subscribe/unsubscribe, and disconnect handling.
 
 ---
 

@@ -1,7 +1,7 @@
 # Session Progress
 
 **Last updated:** 2026-09-13
-**Session:** TODO-012 read-only CLOB REST adapter
+**Session:** TODO-013 read-only market WebSocket adapter
 **Operating mode:** RESEARCH (live trading remains disabled)
 
 This file exists so a later session can continue without rediscovering state.
@@ -12,7 +12,7 @@ This file exists so a later session can continue without rediscovering state.
 
 1. Read this file and `memory.md`.
 2. Read `docs/project-state/CURRENT-STATE.md` and `TODO.md`.
-3. Continue at **TODO-013** (market WebSocket adapter). Do not skip to trading.
+3. Continue at **TODO-014** (snapshot + stream recovery). Do not skip to trading.
 
 ```powershell
 pnpm install
@@ -38,55 +38,53 @@ vendor/polymarket-agent-skills/
 
 ## Completed this session
 
-TODO-012 (read-only CLOB REST adapter).
+TODO-013 (read-only market WebSocket adapter).
 
 | Check | Result |
 | --- | --- |
-| `pnpm exec vitest run packages/polymarket/tests/market-data.test.ts` | 9 passed |
+| `pnpm exec vitest run packages/polymarket/tests/websocket.test.ts` | 20 passed |
+| `pnpm test` | 97 passed (1 skipped) |
 | `pnpm typecheck` | pass |
+| `pnpm build` | pass |
 | Live trading | not implemented |
 | CLOB/order APIs | not added |
 
-### Market-family validation behavior
+### Market WebSocket adapter behavior
 
-- `validateMarketFamily()` compares a requested `same-contract` or `distinct-contract` relationship.
-- It checks event id, supplied authoritative underlying/reference asset facts, resolution mechanism/source/rule text/end timestamp, and YES/NO labels.
-- Every check is `match`, `mismatch`, or `unknown`; aggregate status is `compatible`, `incompatible`, or `unknown`.
-- Title, slug, category, and ticker-like text are not inputs, and identities are not mutated.
-- Current Gamma records lack an authoritative reference asset. A caller must provide approved enrichment before a fully compatible result is possible.
-
-### CLOB adapter behavior
-
-- Consulted `vendor/polymarket-agent-skills/SKILL.md` (Core Pattern: Read Orderbook) and `market-data.md` (CLOB Orderbook, Prices, Midpoint, Spread, Key Market Fields).
-- Verified the current official `@polymarket/client` public methods: `fetchOrderBook`, `fetchMidpoint`, and `fetchSpread`. Tick size and negative-risk status are read from the order-book response because the installed public-client type does not expose standalone methods.
-- `createClobMarketData()` normalizes public CLOB responses; malformed records become `MarketDataError` and unavailable optional prices remain null.
-- No `SecureClient`, orders, credentials, or WebSocket support was added.
+- Consulted `vendor/polymarket-agent-skills/SKILL.md` (Core Pattern: WebSocket Subscribe), `market-data.md` (Key Market Fields, Prices, CLOB Orderbook), and `websocket.md` (Market Channel, Subscribe, Event Types, Example Messages, Dynamic Subscribe/Unsubscribe, Heartbeat, Full TypeScript Example).
+- Verified public market endpoint: `wss://ws-subscriptions-clob.polymarket.com/ws/market`.
+- Implemented `createMarketWebSocketAdapter()` and `parseMarketStreamMessage()` in `packages/polymarket/src/websocket.ts`.
+- Manages subscriptions by asset IDs (token IDs) with `custom_feature_enabled: true`.
+- Supports dynamic subscribe and unsubscribe operations (`operation: "subscribe" | "unsubscribe"`).
+- Automatically sends 10-second `PING` heartbeats and ignores `PONG` response messages.
+- Normalizes all 7 officially supported market channel event types:
+  - `book`: resting bids/asks, market condition id, asset id, timestamp, hash.
+  - `price_change`: price change items including level removal (`size: "0"`), side, best bid/ask.
+  - `last_trade_price`: executed trade price, size, side, fee rate bps, timestamp.
+  - `tick_size_change`: old tick size, new tick size, asset id, timestamp.
+  - `best_bid_ask`: top-of-book bid, ask, spread, timestamp.
+  - `new_market`: question, market condition id, asset IDs, outcome labels.
+  - `market_resolved`: winning asset ID, winning outcome label, market condition id.
+- Unknown events explicitly return `MarketUnknownEvent` without throwing or guessing.
+- Malformed payloads (invalid JSON, non-objects, missing event types, malformed numbers/levels) safely return `MarketMalformedEvent`.
+- Provides lifecycle event listeners: `onEvent`, `onError`, `onClose`, `onOpen`.
+- Connection failure and disconnect cleanly managed; heartbeat timer cleared on close/disconnect.
+- Preserves canonical market identity without mutation.
+- Strictly read-only: no order submission, cancellation, wallet handling, or `SecureClient` construction.
 
 ### Skills consulted
 
-- `SKILL.md` (entry point)
-- `market-data.md`
+- `vendor/polymarket-agent-skills/SKILL.md` (entry point & Core Pattern: WebSocket Subscribe)
+- `vendor/polymarket-agent-skills/market-data.md` (CLOB orderbook & key market fields)
+- `vendor/polymarket-agent-skills/websocket.md` (market channel, event schemas, subscriptions, heartbeat)
 
 Snapshot commit: `91ee44ae113e958affd20cd505c6e9d9d6100e0b`
 
-### SDK conflict (recorded as D-074)
-
-Official skill examples use `@polymarket/clob-client`. This repo continues to use `@polymarket/client` `createPublicClient()` (D-064). Resolution extraction used Gamma/SDK `Market.resolution` fields, not the archived CLOB client.
-
-### Resolution behavior
-
-- Stated source and description-as-rule-text are preserved with evidence paths.
-- Title/slug are not substitutes.
-- `referenceAsset` is always null (no official Gamma field).
-- Market vs event source mismatch → interpreted source unknown.
-- Gamma `closed` ≠ UMA resolved.
-- `isDiscoveredAsTradable()` remains false.
-
 ---
 
-## Next: TODO-013 Market WebSocket adapter
+## Next: TODO-014 Snapshot + Stream Recovery
 
-Implement the read-only market WebSocket integration for supported market events, beginning from the REST snapshot foundation. Do not implement user streams, order submission, or any authenticated WebSocket behavior.
+Implement the market-state synchronization mechanism that pairs a REST order-book snapshot with incoming WebSocket updates, detects stream sequence/state gaps, and triggers resynchronization recovery.
 
 Preserve research-first safety; do not add order submission or construct a `SecureClient`.
 

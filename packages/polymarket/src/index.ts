@@ -36,3 +36,26 @@ export type {
   SearchQuery,
   TagRef,
 } from "./queries.js";
+export {
+  POLYMARKET_MARKET_WS_URL,
+  WS_HEARTBEAT_INTERVAL_MS,
+  createMarketWebSocketAdapter,
+  parseMarketStreamMessage,
+  type CloseDetails,
+  type MarketBestBidAskEvent,
+  type MarketBookEvent,
+  type MarketLastTradePriceEvent,
+  type MarketMalformedEvent,
+  type MarketNewMarketEvent,
+  type MarketPriceChangeEvent,
+  type MarketPriceChangeItem,
+  type MarketResolvedEvent,
+  type MarketStreamEvent,
+  type MarketTickSizeChangeEvent,
+  type MarketUnknownEvent,
+  type MarketWebSocketAdapter,
+  type MarketWebSocketLike,
+  type MarketWebSocketOptions,
+  type WebSocketFactory,
+} from "./websocket.js";
+
