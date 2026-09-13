@@ -12,6 +12,10 @@ export {
   normalizeSdkTag,
   normalizeTag,
 } from "./normalize.js";
+export {
+  extractMarketResolution,
+  isResolutionValidated,
+} from "@polymarket-bot/market-models";
 export type {
   EventRef,
   ListEventsQuery,

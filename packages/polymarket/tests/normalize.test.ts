@@ -20,6 +20,10 @@ describe("normalizeMarket", () => {
     expect(discovered?.observedResolution.source).toBe(
       "Official confirmation",
     );
+    expect(discovered?.resolution.statedSource).toBe("Official confirmation");
+    expect(discovered?.resolution.observedRuleText).toContain("Resolves");
+    expect(discovered?.resolution.completeness).toBe("sufficient");
+    expect(discovered?.resolution.referenceAsset).toBeNull();
     expect(isCompleteMarketIdentity(discovered!.identity)).toBe(true);
   });
 
@@ -49,17 +53,33 @@ describe("normalizeMarket", () => {
     expect(discovered?.identity.eventId).toBeNull();
     expect(discovered?.event).toBeNull();
     expect(discovered?.observedResolution.source).toBeNull();
+    expect(discovered?.resolution.statedSource).toBeNull();
     expect(isCompleteMarketIdentity(discovered!.identity)).toBe(false);
+    expect(discovered?.resolution.observedRuleText).toContain("Resolves");
+    expect(discovered?.resolution.completeness).toBe("sufficient");
   });
 
   it("classifies closed Gamma markets as closed, not resolved", () => {
     const discovered = normalizeMarket(
       marketFixture({
         state: { active: false, closed: true, archived: false },
+        resolution: {
+          questionId: null,
+          negRiskRequestId: null,
+          umaResolutionStatus: null,
+          source: "Official confirmation",
+          resolvedBy: null,
+        },
       }),
       OBSERVED_AT,
     );
     expect(discovered?.status).toBe("closed");
+    expect(discovered?.resolution.umaIndicatesResolved).toBeNull();
+  });
+
+  it("does not change identity when extracting resolution", () => {
+    const discovered = normalizeMarket(marketFixture(), OBSERVED_AT);
+    expect(discovered?.resolution.identity).toEqual(discovered?.identity);
   });
 
   it("drops markets that lack a market id", () => {

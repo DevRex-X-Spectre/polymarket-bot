@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/CURRENT-STATE.md`
 **Status:** Active
 **Document Type:** Project State Record
-**Last Updated:** 2026-09-13 (Gamma discovery implemented)
+**Last Updated:** 2026-09-13 (TODO-010 resolution metadata implemented)
 
 ---
 
@@ -49,11 +49,11 @@ RESEARCH / FOUNDATION IMPLEMENTATION
 
 phase.
 
-Documentation remains complete. Phase 0 (repository foundation), Phase 1 (configuration isolation), and Gamma market discovery (TODO-008) plus market identity types (TODO-009) are implemented in code.
+Documentation remains complete. Phase 0–1, Gamma discovery (TODO-008), market identity (TODO-009), and resolution metadata extraction (TODO-010) are implemented in code.
 
 The project has not yet been approved for unrestricted live trading.
 
-The current priority is resolution metadata extraction (TODO-010), then market-family validation (TODO-011). CLOB adapters and live trading remain unimplemented.
+The current priority is market-family validation (TODO-011). CLOB adapters and live trading remain unimplemented.
 
 ---
 
@@ -204,7 +204,9 @@ https://clob.polymarket.com
 
 The official current TypeScript SDK is the primary application integration direction.
 
-Public Gamma discovery is implemented via `@polymarket/client` `createPublicClient()` in `packages/polymarket`. Internal identity types live in `packages/market-models`. A `SecureClient` is not constructed. Order submission remains unimplemented.
+Public Gamma discovery is implemented via `@polymarket/client` `createPublicClient()` in `packages/polymarket`. Internal identity types live in `packages/market-models`. Resolution metadata is extracted from stated Gamma/SDK fields (`market.resolution.*`, `market.description`, outcome labels, timing) without inferring Binance or a reference asset from the title. A `SecureClient` is not constructed. Order submission remains unimplemented.
+
+Official Polymarket agent skills are snapshotted from `Polymarket/agent-skills@91ee44ae113e958affd20cd505c6e9d9d6100e0b` under `vendor/polymarket-agent-skills/` and `.grok/skills/web3-polymarket/`. Those skills remain a domain reference; this repository continues to use `@polymarket/client`, not `@polymarket/clob-client`.
 
 The official Python SDK is primarily intended for research workflows.
 

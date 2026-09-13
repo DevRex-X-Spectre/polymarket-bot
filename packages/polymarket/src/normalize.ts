@@ -2,9 +2,11 @@ import type { Event, Market, Tag } from "@polymarket/client";
 import {
   DISCOVERY_SOURCE_GAMMA,
   classifyGammaMarketStatus,
+  extractMarketResolution,
   type DiscoveredEvent,
   type DiscoveredMarket,
   type EventIdentity,
+  type EventObservedResolution,
   type GammaMarketFlags,
   type ObservedResolution,
   type TagIdentity,
@@ -15,6 +17,7 @@ export function normalizeMarket(
   market: Market,
   observedAt: string,
   parentEvent: EventIdentity | null = null,
+  eventResolutionHint: EventObservedResolution | null = null,
 ): DiscoveredMarket | null {
   const marketId = asOptionalString(market.id);
   if (marketId === null) {
@@ -25,41 +28,57 @@ export function normalizeMarket(
   const flags = gammaFlags(market);
   const yes = market.outcomes?.yes;
   const no = market.outcomes?.no;
+  const identity = {
+    marketId,
+    conditionId: asOptionalString(market.conditionId),
+    slug: asOptionalString(market.slug),
+    eventId: event?.eventId ?? null,
+    yesTokenId: asOptionalString(yes?.tokenId),
+    noTokenId: asOptionalString(no?.tokenId),
+  };
+  const observedResolution = observedResolutionFromMarket(market);
+  const timing = {
+    startDate: asOptionalString(market.state?.startDate),
+    endDate: asOptionalString(market.state?.endDate),
+    closedTime: asOptionalString(market.state?.closedTime),
+  };
+  const outcomes = {
+    yes: {
+      side: "yes" as const,
+      label: asOptionalString(yes?.label),
+      tokenId: asOptionalString(yes?.tokenId),
+    },
+    no: {
+      side: "no" as const,
+      label: asOptionalString(no?.label),
+      tokenId: asOptionalString(no?.tokenId),
+    },
+  };
+  const question = asOptionalString(market.question);
+  const description = asOptionalString(market.description);
 
   return {
-    identity: {
-      marketId,
-      conditionId: asOptionalString(market.conditionId),
-      slug: asOptionalString(market.slug),
-      eventId: event?.eventId ?? null,
-      yesTokenId: asOptionalString(yes?.tokenId),
-      noTokenId: asOptionalString(no?.tokenId),
-    },
+    identity,
     event,
-    question: asOptionalString(market.question),
-    description: asOptionalString(market.description),
+    question,
+    description,
     category: asOptionalString(market.category),
     status: classifyGammaMarketStatus(flags),
     gammaFlags: flags,
-    timing: {
-      startDate: asOptionalString(market.state?.startDate),
-      endDate: asOptionalString(market.state?.endDate),
-      closedTime: asOptionalString(market.state?.closedTime),
-    },
-    outcomes: {
-      yes: {
-        side: "yes",
-        label: asOptionalString(yes?.label),
-        tokenId: asOptionalString(yes?.tokenId),
-      },
-      no: {
-        side: "no",
-        label: asOptionalString(no?.label),
-        tokenId: asOptionalString(no?.tokenId),
-      },
-    },
+    timing,
+    outcomes,
     tags: (market.tags ?? []).map(normalizeTag),
-    observedResolution: observedResolutionFromMarket(market),
+    observedResolution,
+    resolution: extractMarketResolution({
+      identity,
+      question,
+      description,
+      observedResolution,
+      outcomes,
+      timing,
+      eventObservedResolution: eventResolutionHint,
+      extractedAt: observedAt,
+    }),
     source: DISCOVERY_SOURCE_GAMMA,
     observedAt,
   };
@@ -74,9 +93,20 @@ export function normalizeEvent(
     return null;
   }
 
+  const observedResolution: EventObservedResolution = {
+    source: asOptionalString(event.resolution?.source),
+    automaticallyResolved: asBoolean(event.resolution?.automaticallyResolved),
+    description: asOptionalString(event.description),
+  };
+
   const markets: DiscoveredMarket[] = [];
   for (const market of event.markets ?? []) {
-    const normalized = normalizeMarket(market, observedAt, identity);
+    const normalized = normalizeMarket(
+      market,
+      observedAt,
+      identity,
+      observedResolution,
+    );
     if (normalized !== null) {
       markets.push(normalized);
     }
@@ -86,6 +116,7 @@ export function normalizeEvent(
     identity,
     markets,
     tags: (event.tags ?? []).map(normalizeTag),
+    observedResolution,
     source: DISCOVERY_SOURCE_GAMMA,
     observedAt,
   };

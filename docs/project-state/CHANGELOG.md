@@ -11,6 +11,24 @@ This file records meaningful historical changes. Current operational state belon
 
 ---
 
+## 2026-09-13 — Resolution metadata extraction
+
+### Added
+
+- Official Polymarket agent-skills snapshot (`Polymarket/agent-skills@91ee44ae113e958affd20cd505c6e9d9d6100e0b`) under `vendor/polymarket-agent-skills/` and `.grok/skills/web3-polymarket/`.
+- `extractMarketResolution()` in `packages/market-models`.
+- Discovery records now include auditable resolution metadata (stated source, rule text, evidence paths, completeness).
+
+### Safety
+
+- Title/slug are not used as a resolution source.
+- Conflicting market/event sources remain unknown.
+- Gamma `closed` is not mapped to resolved.
+- Resolution validation does not imply tradability.
+- No `SecureClient` or order APIs.
+
+---
+
 ## 2026-09-13 — Gamma market discovery
 
 ### Added

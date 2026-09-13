@@ -8,7 +8,7 @@ Documentation in `/docs` is the source of truth. Project status lives in `/docs/
 
 ## Current phase
 
-Repository foundation, configuration isolation, and Gamma market discovery. No CLOB/WebSocket adapters, no order submission, no live wallet handling.
+Repository foundation, configuration isolation, Gamma discovery, and resolution metadata extraction. No CLOB/WebSocket adapters, no order submission, no live wallet handling.
 
 Operating modes:
 
@@ -48,8 +48,9 @@ Copy `.env.example` to `.env` if you need local overrides. Never commit `.env` o
 apps/trader              TypeScript process (research/paper shell)
 packages/shared          Modes, logging, redaction, safety flags
 packages/config          Fail-closed environment configuration
-packages/market-models   Internal market/event identity
+packages/market-models   Internal market/event identity and resolution metadata
 packages/polymarket      Official public Gamma client (no orders)
+vendor/polymarket-agent-skills  Unmodified official Polymarket agent-skills snapshot
 research/            Isolated Python research package
 data/                Research datasets (not committed)
 scripts/             Operator helpers
@@ -69,4 +70,4 @@ Logical engines in `docs/03-technical-stack.md` are modules, not independently d
 
 ## Next implementation
 
-See `docs/project-state/TODO.md`. The next work is resolution metadata extraction (TODO-010).
+See `docs/project-state/TODO.md`. The next work is market-family validation (TODO-011).

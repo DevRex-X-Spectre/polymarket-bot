@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/DECISIONS.md`
 **Status:** Active
 **Document Type:** Decision Register
-**Last Updated:** 2026-09-13 (D-073 Gamma discovery adapter)
+**Last Updated:** 2026-09-13 (D-074 agent-skills snapshot, D-075 resolution metadata)
 
 ---
 
@@ -1348,7 +1348,45 @@ Rules:
 
 ---
 
-# 77. Decision Change Protocol
+# 77. D-074: Official Agent Skills Are a Domain Reference
+
+**Status:** APPROVED
+
+The official Polymarket agent-skills repository is:
+
+```text
+https://github.com/Polymarket/agent-skills
+```
+
+Snapshot: commit `91ee44ae113e958affd20cd505c6e9d9d6100e0b` (retrieved 2026-09-13) at `vendor/polymarket-agent-skills/` and `.grok/skills/web3-polymarket/`. Official skill text is not modified.
+
+Those skills describe Polymarket behavior. This project's application integration remains `@polymarket/client` `createPublicClient()` (D-064). The skill examples that use `@polymarket/clob-client` must not replace that decision.
+
+---
+
+# 78. D-075: Resolution Metadata Does Not Infer a Source
+
+**Status:** APPROVED
+
+Resolution extraction records stated Gamma/SDK evidence:
+
+* `market.resolution.source` / `event.resolution.source`
+* `market.description` as observed rule text
+* YES/NO outcome labels
+* timing fields
+* UMA status (`resolved` / `settled` / `proposed` / `disputed` / `requested`)
+
+It must not infer Binance, Chainlink, or any reference asset from the market title or slug. There is no official Gamma `referenceAsset` field in the current SDK `Market` type, so `referenceAsset` remains `null`.
+
+If market and event stated sources differ, the interpreted source stays unknown and both values are preserved as evidence.
+
+Gamma `closed` is not treated as UMA resolved.
+
+Successful resolution extraction does not make a market tradable.
+
+---
+
+# 79. Decision Change Protocol
 
 When an approved decision needs to change:
 
@@ -1372,7 +1410,7 @@ The previous decision must not simply disappear from the project history.
 
 ---
 
-# 78. Decision Integrity Rule
+# 80. Decision Integrity Rule
 
 The AI agent must not silently change an approved decision because:
 
@@ -1385,7 +1423,7 @@ Material changes require evidence and appropriate approval.
 
 ---
 
-# 79. Final Decision Principle
+# 81. Final Decision Principle
 
 The project follows:
 

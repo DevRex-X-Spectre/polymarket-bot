@@ -1,3 +1,4 @@
+import type { MarketResolutionMetadata } from "./resolution.js";
 import type { GammaMarketFlags, MarketLifecycleStatus } from "./status.js";
 
 export const DISCOVERY_SOURCE_GAMMA = "gamma" as const;
@@ -39,13 +40,18 @@ export interface MarketTiming {
 
 /**
  * Resolution fields copied from Gamma/SDK without interpretation.
- * Rule extraction belongs to TODO-010; unknown stays unknown.
  */
 export interface ObservedResolution {
   readonly source: string | null;
   readonly resolvedBy: string | null;
   readonly questionId: string | null;
   readonly umaResolutionStatus: string | null;
+}
+
+export interface EventObservedResolution {
+  readonly source: string | null;
+  readonly automaticallyResolved: boolean | null;
+  readonly description: string | null;
 }
 
 export interface DiscoveredMarket {
@@ -63,6 +69,7 @@ export interface DiscoveredMarket {
   };
   readonly tags: readonly TagIdentity[];
   readonly observedResolution: ObservedResolution;
+  readonly resolution: MarketResolutionMetadata;
   readonly source: DiscoverySource;
   readonly observedAt: string;
 }
@@ -71,6 +78,7 @@ export interface DiscoveredEvent {
   readonly identity: EventIdentity;
   readonly markets: readonly DiscoveredMarket[];
   readonly tags: readonly TagIdentity[];
+  readonly observedResolution: EventObservedResolution;
   readonly source: DiscoverySource;
   readonly observedAt: string;
 }

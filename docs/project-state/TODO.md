@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/TODO.md`
 **Status:** Active
 **Document Type:** Project Backlog
-**Last Updated:** 2026-09-13 (Phase 2 Gamma discovery and market identity implemented)
+**Last Updated:** 2026-09-13 (TODO-010 resolution metadata implemented)
 
 ---
 
@@ -31,6 +31,7 @@ Repository foundation (Phase 0 completed)
 Configuration isolation (Phase 1 completed)
 Gamma market discovery (TODO-008 completed)
 Market identity types (TODO-009 completed)
+Resolution metadata extraction (TODO-010 completed)
 ```
 
 The following are established:
@@ -269,7 +270,7 @@ It should preserve the information required to uniquely identify and reason abou
 
 ## TODO-010: Implement Resolution Metadata Extraction
 
-**Status:** NOT STARTED
+**Status:** COMPLETED
 
 Extract and normalize the market's resolution information.
 
@@ -288,6 +289,8 @@ The system must be able to answer:
 > What exactly determines the outcome of this market?
 
 before a strategy treats the market as eligible.
+
+**Completed (2026-09-13):** `extractMarketResolution()` records stated Gamma/SDK source, description-as-rule-text, YES/NO labels, timing, UMA status, and evidence field paths. Missing or conflicting sources stay unknown. Title/slug are not used as substitutes. `referenceAsset` is always null until an official field exists. Gamma `closed` is not mapped to resolved. Resolution validation does not imply tradability.
 
 ---
 
