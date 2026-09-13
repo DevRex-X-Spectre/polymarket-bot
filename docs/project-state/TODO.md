@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/TODO.md`
 **Status:** Active
 **Document Type:** Project Backlog
-**Last Updated:** 2026-09-13 (TODO-011 market-family validation implemented)
+**Last Updated:** 2026-09-13 (TODO-012 read-only CLOB REST adapter implemented)
 
 ---
 
@@ -310,7 +310,7 @@ It must verify compatibility before comparing markets for structural relationshi
 
 ## TODO-012: Implement CLOB REST Adapter
 
-**Status:** NOT STARTED
+**Status:** COMPLETED
 
 Implement the read-only market-data integration required for:
 
@@ -318,6 +318,8 @@ Implement the read-only market-data integration required for:
 * Prices
 * Market information
 * Dynamic trading parameters
+
+**Completed (2026-09-13):** `createClobMarketData()` uses the existing official `@polymarket/client` public client to call only `fetchOrderBook`, `fetchMidpoint`, and `fetchSpread`. It normalizes token-keyed order books, optional midpoint/spread, and book-provided minimum order size, tick size, and negative-risk status into internal adapter types. Invalid CLOB responses fail as `MarketDataError`; unavailable optional price fields remain null. No authenticated client, orders, or streaming support was added.
 
 ---
 

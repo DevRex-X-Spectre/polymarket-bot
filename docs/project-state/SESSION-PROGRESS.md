@@ -1,7 +1,7 @@
 # Session Progress
 
 **Last updated:** 2026-09-13
-**Session:** TODO-011 market-family validation
+**Session:** TODO-012 read-only CLOB REST adapter
 **Operating mode:** RESEARCH (live trading remains disabled)
 
 This file exists so a later session can continue without rediscovering state.
@@ -12,7 +12,7 @@ This file exists so a later session can continue without rediscovering state.
 
 1. Read this file and `memory.md`.
 2. Read `docs/project-state/CURRENT-STATE.md` and `TODO.md`.
-3. Continue at **TODO-012** (read-only CLOB REST adapter). Do not skip to trading.
+3. Continue at **TODO-013** (market WebSocket adapter). Do not skip to trading.
 
 ```powershell
 pnpm install
@@ -38,11 +38,11 @@ vendor/polymarket-agent-skills/
 
 ## Completed this session
 
-TODO-011 (market-family validation).
+TODO-012 (read-only CLOB REST adapter).
 
 | Check | Result |
 | --- | --- |
-| `pnpm exec vitest run packages/market-models/tests` | 27 passed |
+| `pnpm exec vitest run packages/polymarket/tests/market-data.test.ts` | 9 passed |
 | `pnpm typecheck` | pass |
 | Live trading | not implemented |
 | CLOB/order APIs | not added |
@@ -54,6 +54,13 @@ TODO-011 (market-family validation).
 - Every check is `match`, `mismatch`, or `unknown`; aggregate status is `compatible`, `incompatible`, or `unknown`.
 - Title, slug, category, and ticker-like text are not inputs, and identities are not mutated.
 - Current Gamma records lack an authoritative reference asset. A caller must provide approved enrichment before a fully compatible result is possible.
+
+### CLOB adapter behavior
+
+- Consulted `vendor/polymarket-agent-skills/SKILL.md` (Core Pattern: Read Orderbook) and `market-data.md` (CLOB Orderbook, Prices, Midpoint, Spread, Key Market Fields).
+- Verified the current official `@polymarket/client` public methods: `fetchOrderBook`, `fetchMidpoint`, and `fetchSpread`. Tick size and negative-risk status are read from the order-book response because the installed public-client type does not expose standalone methods.
+- `createClobMarketData()` normalizes public CLOB responses; malformed records become `MarketDataError` and unavailable optional prices remain null.
+- No `SecureClient`, orders, credentials, or WebSocket support was added.
 
 ### Skills consulted
 
@@ -77,9 +84,9 @@ Official skill examples use `@polymarket/clob-client`. This repo continues to us
 
 ---
 
-## Next: TODO-012 Read-only CLOB REST adapter
+## Next: TODO-013 Market WebSocket adapter
 
-Implement only the read-only CLOB market-data integration needed for orderbooks, prices, market information, and dynamic market parameters.
+Implement the read-only market WebSocket integration for supported market events, beginning from the REST snapshot foundation. Do not implement user streams, order submission, or any authenticated WebSocket behavior.
 
 Preserve research-first safety; do not add order submission or construct a `SecureClient`.
 

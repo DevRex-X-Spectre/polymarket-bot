@@ -1394,7 +1394,15 @@ Market-family validation compares only authoritative normalized facts and return
 
 ---
 
-# 80. Decision Change Protocol
+# 80. D-077: CLOB Dynamic Parameters Come From Public Order Books
+
+**Status:** APPROVED
+
+The TODO-012 adapter uses the current `@polymarket/client` public-client methods `fetchOrderBook`, `fetchMidpoint`, and `fetchSpread`. Although the archived agent-skills snapshot shows standalone tick-size and negative-risk reads in an older CLOB client pattern, the installed current public-client type does not expose those methods. Tick size, minimum order size, and negative-risk status are therefore preserved only when present in the public order-book response; otherwise they remain null. No authenticated client is introduced to obtain them.
+
+---
+
+# 81. Decision Change Protocol
 
 When an approved decision needs to change:
 
@@ -1418,7 +1426,7 @@ The previous decision must not simply disappear from the project history.
 
 ---
 
-# 81. Decision Integrity Rule
+# 82. Decision Integrity Rule
 
 The AI agent must not silently change an approved decision because:
 
@@ -1431,7 +1439,7 @@ Material changes require evidence and appropriate approval.
 
 ---
 
-# 82. Final Decision Principle
+# 83. Final Decision Principle
 
 The project follows:
 
@@ -1482,6 +1490,7 @@ The bot is being built as a research and execution system whose profitability mu
 | D-068 | No premature microservices      | Approved           |
 | D-075 | Project-state separation        | Approved           |
 | D-076 | Strict market-family validation | Approved           |
+| D-077 | Public order-book dynamic fields | Approved          |
 
 ---
 

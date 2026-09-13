@@ -11,6 +11,26 @@ This file records meaningful historical changes. Current operational state belon
 
 ---
 
+## 2026-09-13 — Read-only CLOB REST adapter
+
+### Added
+
+- `createClobMarketData()` in `packages/polymarket` for public CLOB order books, midpoint, spread, and book-provided dynamic parameters.
+- Typed normalization for order-book levels and dynamic parameters, with `MarketDataError` at the external boundary.
+- Mock-only tests covering multiple and empty books, malformed levels, wrong tokens, API failures, unknown optional prices, and identity preservation.
+
+### Verified sources
+
+- Official agent-skills snapshot: `SKILL.md` (Core Pattern: Read Orderbook) and `market-data.md` (CLOB Orderbook, Prices, Midpoint, Spread, Key Market Fields).
+- Official `Polymarket/ts-sdk` `@polymarket/client` public-client API: [`clients.ts`](https://github.com/Polymarket/ts-sdk/blob/main/packages/client/src/clients.ts), [`actions/clob.ts`](https://github.com/Polymarket/ts-sdk/blob/main/packages/client/src/actions/clob.ts), and [`markets.ts` example](https://github.com/Polymarket/ts-sdk/blob/main/examples/scripts/src/lib/markets.ts). Verified public methods: `fetchOrderBook`, `fetchMidpoint`, and `fetchSpread`. The installed public-client type does not expose standalone tick-size or negative-risk methods, so those values are read only from the order-book response.
+
+### Safety
+
+- The adapter constructs only the existing public client and exposes no authenticated or mutating operation.
+- No `SecureClient`, order submission, wallet handling, or WebSocket capability was added.
+
+---
+
 ## 2026-09-13 — Market-family validation
 
 ### Added

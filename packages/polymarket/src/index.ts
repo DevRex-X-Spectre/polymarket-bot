@@ -6,6 +6,17 @@ export {
   type MarketDiscovery,
 } from "./discovery.js";
 export { DiscoveryError } from "./errors.js";
+export { MarketDataError } from "./errors.js";
+export {
+  createClobMarketData,
+  type ClobMarketData,
+  type ClobMarketDataAdapter,
+  type ClobMarketTarget,
+  type ClobOrderBook,
+  type ClobReadClient,
+  type CreateClobMarketDataOptions,
+  type OrderBookLevel,
+} from "./market-data.js";
 export {
   normalizeEvent,
   normalizeMarket,

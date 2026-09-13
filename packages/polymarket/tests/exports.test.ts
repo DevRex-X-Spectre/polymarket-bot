@@ -14,7 +14,13 @@ describe("polymarket package exports", () => {
   });
 
   it("does not import createSecureClient in source", () => {
-    const files = ["client.ts", "discovery.ts", "index.ts", "normalize.ts"];
+    const files = [
+      "client.ts",
+      "discovery.ts",
+      "index.ts",
+      "market-data.ts",
+      "normalize.ts",
+    ];
     for (const file of files) {
       const source = readFileSync(path.join(srcDir, file), "utf8");
       expect(source).not.toMatch(/createSecureClient/);

@@ -5,7 +5,7 @@
 **Document:** `docs/project-state/CURRENT-STATE.md`
 **Status:** Active
 **Document Type:** Project State Record
-**Last Updated:** 2026-09-13 (TODO-011 market-family validation implemented)
+**Last Updated:** 2026-09-13 (TODO-012 read-only CLOB REST adapter implemented)
 
 ---
 
@@ -49,11 +49,11 @@ RESEARCH / FOUNDATION IMPLEMENTATION
 
 phase.
 
-Documentation remains complete. Phase 0–1, Gamma discovery (TODO-008), market identity (TODO-009), resolution metadata extraction (TODO-010), and market-family validation (TODO-011) are implemented in code.
+Documentation remains complete. Phase 0–1, Gamma discovery (TODO-008), market identity (TODO-009), resolution metadata extraction (TODO-010), market-family validation (TODO-011), and the read-only CLOB REST adapter (TODO-012) are implemented in code.
 
 The project has not yet been approved for unrestricted live trading.
 
-The current priority is the read-only CLOB REST adapter (TODO-012). CLOB adapters and live trading remain unimplemented.
+The current priority is the market WebSocket adapter (TODO-013). Live trading remains unimplemented.
 
 ---
 
@@ -204,7 +204,7 @@ https://clob.polymarket.com
 
 The official current TypeScript SDK is the primary application integration direction.
 
-Public Gamma discovery is implemented via `@polymarket/client` `createPublicClient()` in `packages/polymarket`. Internal identity types live in `packages/market-models`. Resolution metadata is extracted from stated Gamma/SDK fields (`market.resolution.*`, `market.description`, outcome labels, timing) without inferring Binance or a reference asset from the title. A `SecureClient` is not constructed. Order submission remains unimplemented.
+Public Gamma discovery and read-only CLOB data are implemented via `@polymarket/client` `createPublicClient()` in `packages/polymarket`. `createClobMarketData()` wraps public `fetchOrderBook`, `fetchMidpoint`, and `fetchSpread`, normalizing order-book levels and the book-provided dynamic parameters without leaking SDK response shapes. Internal identity types live in `packages/market-models`. Resolution metadata is extracted from stated Gamma/SDK fields (`market.resolution.*`, `market.description`, outcome labels, timing) without inferring Binance or a reference asset from the title. A `SecureClient` is not constructed. Order submission remains unimplemented.
 
 Official Polymarket agent skills are snapshotted from `Polymarket/agent-skills@91ee44ae113e958affd20cd505c6e9d9d6100e0b` under `vendor/polymarket-agent-skills/` and `.grok/skills/web3-polymarket/`. Those skills remain a domain reference; this repository continues to use `@polymarket/client`, not `@polymarket/clob-client`.
 
